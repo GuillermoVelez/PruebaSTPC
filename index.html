@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>Technical_Test</title>
+    </head>
+    <body>
+        <div>
+            
+        </div>
+
+        <ul id='list'>
+
+        </ul>
+        <p>id</p>
+        <input type="number" id="idProduct">
+        <p>Name</p>
+        <input type="text" id="Name">
+        <p>Description</p>
+        <input type="text" id="Description">
+        <p>NumberReference</p>
+        <input type="text" id="NumberReference">
+        <p>Patent</p>
+        <input type="number" id="Patent">
+        <p>Category</p>
+        <input type="number" id="Category">
+        <p>Available unities</p>
+        <input type="number" id="AvailableUnities">
+        <p>Time warranty</p>
+        <input type="number" id="TimeWarranty">
+        <p>High (cm)</p>
+        <input type="number" id="High">
+        <p>Length (cm)</p>
+        <input type="number" id="Length">
+        <p>Width (cm)</p>
+        <input type="number" id="Width">
+        <button id="CreateProduct">CreateProduct</button>
+    </body>
+</html>
+
+<script>
+    const list = document.getElementById('list')
+    const button = document.getElementById('CreateProduct')
+    button.addEventListener('click',()=>{
+        const newProduct={
+            "id": idProduct,
+            "nombre": "string",
+            "descripcion": "string",
+            "precio": "string",
+            "numeroReferencia": "string",
+            "idMarca": 0,
+            "idCategoria": 0,
+            "unidadesDisponibles": 0,
+            "tiempoGarantia": 0,
+            "alto": 0,
+            "largo": 0,
+            "ancho": 0
+
+        }
+    })
+    /*function getProducts(){
+        const res= fetch('https://electrics.azurewebsites.net/Electrodomestico/ListarElectrodomesticos?dataOwner=023223b1-9c10-40cb-a890-1f164057389d',
+        { mode: 'no-cors'
+        })
+        return res;
+    }
+    console.log(res);*/
+    
+    function getProducts(){
+        fetch('https://electrics.azurewebsites.net/Electrodomestico/ListarElectrodomesticos?dataOwner=023223b1-9c10-40cb-a890-1f164057389d',
+        ).then(function (response) {
+	    // The API call was successful!
+            console.log('success!', response);
+        }).catch(function (err) {
+            // There was an error
+            console.warn('Something went wrong.', err);
+        });
+    }
+    getProducts()
+</script>

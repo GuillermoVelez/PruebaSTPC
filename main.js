@@ -1,41 +1,73 @@
-function getBrand(){
-    const res= fetch('https://electrics.azurewebsites.net/Marca/ListarMarcas?dataOwner=023223b1-9c10-40cb-a890-1f164057389d'
-    ).then(products => products.json()).then(postFormat=>{
-        const select = document.getElementById('filter');
-        for (i=0;i<postFormat.length;i++){
-            let newElement = document.createElement('option');
-            newElement.innerHTML=postFormat[i].nombre;
-            newElement.value=postFormat[i].nombre;
-            select.appendChild(newElement);
-        }
+var productArray = [];
+var filterProductsArray = [];
+var brandArray = [];
+const select = document.getElementById('filter');
+brand = document.getElementById('filter');
+brand.addEventListener('change', (event) => {
+    updateProducts()
+});
+
+
+function getProducts(filter) {
+    const response = fetch('https://electrics.azurewebsites.net/Marca/ListarMarcas?dataOwner=023223b1-9c10-40cb-a890-1f164057389d'
+    ).then(brand => brand.json()).then(brandFormat => {
+        const res = fetch('https://electrics.azurewebsites.net/Electrodomestico/ListarElectrodomesticos?dataOwner=023223b1-9c10-40cb-a890-1f164057389d'
+        ).then(products => products.json()).then(productArray => {
+
+        })
     })
-    return res
 }
-function getProducts(){
-    const res= fetch('https://electrics.azurewebsites.net/Electrodomestico/ListarElectrodomesticos?dataOwner=023223b1-9c10-40cb-a890-1f164057389d'
-        ).then(products => products.json()).then(postFormat=>{
-        const list = document.getElementById('list');
-        var txtOut ="";
-        for (i=0;i<postFormat.length;i++){
-            let newElement = document.createElement('li');
-            txtOut += `<b>${postFormat[i].nombre}</b><br />`;
-            txtOut += `Hight: ${postFormat[i].alto}<br />`;
-            txtOut += `Width: ${postFormat[i].ancho}<br />`;
-            txtOut += `Large: ${postFormat[i].largo}<br />`;
-            txtOut += `Description: ${postFormat[i].descripcion}<br />`;
-            txtOut += `NumberReference: ${postFormat[i].numeroReferencia}<br />`;
-            txtOut += `Price: ${postFormat[i].precio}$ <br />`;
-            txtOut += `Warranty: ${postFormat[i].tiempoGarantia} días <br />`;
-            txtOut += `Unities: ${postFormat[i].unidadesDisponibles}<br />`;
-            newElement.innerHTML=txtOut;
-            list.appendChild(newElement);
-            txtOut="";
-        }
-    })
-    return res
+
+async function getAllInfo() {
+    brandArray = await fetch('https://electrics.azurewebsites.net/Marca/ListarMarcas?dataOwner=023223b1-9c10-40cb-a890-1f164057389d').then(brand => brand.json())
+    productArray = await fetch('https://electrics.azurewebsites.net/Electrodomestico/ListarElectrodomesticos?dataOwner=023223b1-9c10-40cb-a890-1f164057389d').then(brand => brand.json())
 }
-console.log(getBrand());
-console.log(getProducts());
+
+async function main() {
+    await getAllInfo();
+    let options = `<option value="all">All</option>`;
+    for (i = 0; i < brandArray.length; i++) {
+        idMarca = brandArray[i].nombre;
+        options += `<option value="${brandArray[i].id}">
+            ${brandArray[i].nombre}</option>`;
+        select.innerHTML = options;
+    }
+    updateProducts();
+
+}
+function updateProducts() {
+    const list = document.getElementById('list');
+    list.innerHTML = '';
+    var txtOut = "";
+    console.log(productArray);
+    if (select.value != 'all') {
+        filterProductsArray = productArray.filter(product => product.idMarca == select.value);
+    } else { filterProductsArray = productArray }
+    for (i = 0; i < filterProductsArray.length; i++) {
+        let newElement = document.createElement('li');
+        newElement.setAttribute("class", "List");
+        txtOut += `<b>${filterProductsArray[i].nombre}</b><br />`;
+        txtOut += `Hight: ${filterProductsArray[i].alto}<br />`;
+        txtOut += `Width: ${filterProductsArray[i].ancho}<br />`;
+        txtOut += `Large: ${filterProductsArray[i].largo}<br />`;
+        txtOut += `Description: ${filterProductsArray[i].descripcion}<br />`;
+        txtOut += `NumberReference: ${filterProductsArray[i].numeroReferencia}<br />`;
+        txtOut += `Price: ${filterProductsArray[i].precio}$ <br />`;
+        txtOut += `Warranty: ${filterProductsArray[i].tiempoGarantia} días <br />`;
+        txtOut += `Unities: ${filterProductsArray[i].unidadesDisponibles}<br />`;
+        txtOut += `Brand: ${brandArray.find(element => element.id == filterProductsArray[i].idMarca).nombre}<br />`;
+        newElement.innerHTML = txtOut;
+        list.appendChild(newElement);
+        txtOut = "";
+    }
+    
+}
+
+
+main();
+//console.log(brandarray);
+//getBrand();
+
 
 
 

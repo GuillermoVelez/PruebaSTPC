@@ -23,7 +23,6 @@ form.addEventListener('submit', function (e) {
         largo: parseInt(document.getElementsByName('largo')[0].value),
         ancho: parseInt(document.getElementsByName('ancho')[0].value)
     }
-    console.log(newProduct);
     fetch('https://electrics.azurewebsites.net/Electrodomestico/CrearElectrodomestico?dataOwner=023223b1-9c10-40cb-a890-1f164057389d',
         {
             method: 'POST',
@@ -98,7 +97,6 @@ function updateProducts() {
     const list = document.getElementById('list');
     list.innerHTML = '';
     var txtOut = "";
-    console.log(productArray);
     if (select.value != 'all') {
         filterProductsArray = productArray.filter(product => product.idMarca == select.value);
     } else { filterProductsArray = productArray }

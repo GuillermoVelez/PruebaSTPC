@@ -1,16 +1,16 @@
 var productArray = [];
 var filterProductsArray = [];
 var brandArray = [];
-var form= document.getElementById('form');
+var form = document.getElementById('form');
 const select = document.getElementById('filter');
 brand = document.getElementById('filter');
 brand.addEventListener('change', (event) => {
     updateProducts()
 });
 
-form.addEventListener('submit',function(e){
+form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var newProduct={
+    var newProduct = {
         nombre: document.getElementsByName('nombre')[0].value,
         descripcion: document.getElementsByName('descripcion')[0].value,
         precio: document.getElementsByName('precio')[0].value,
@@ -25,16 +25,16 @@ form.addEventListener('submit',function(e){
     }
     console.log(newProduct);
     fetch('https://electrics.azurewebsites.net/Electrodomestico/CrearElectrodomestico?dataOwner=023223b1-9c10-40cb-a890-1f164057389d',
-    {
-        method: 'POST',
-        body: JSON.stringify(newProduct),
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    }).then( res=> res.json())
-    .then(data=>{
-        console.log(data)
-    })
+        {
+            method: 'POST',
+            body: JSON.stringify(newProduct),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(res => res.json())
+        .then(data => {
+            $('#passwordsNoMatchRegister').show();
+        })
 })
 
 
@@ -54,7 +54,7 @@ async function getAllInfo() {
 }
 
 async function main() {
-    
+
     await getAllInfo();
     let options = `<option value="all">All</option>`;
     for (i = 0; i < brandArray.length; i++) {
@@ -76,7 +76,7 @@ function updateProducts() {
     } else { filterProductsArray = productArray }
     for (i = 0; i < filterProductsArray.length; i++) {
         let newElement = document.createElement('li');
-        newElement.setAttribute("class", "List");
+        newElement.setAttribute("class", "list-group-item");
         txtOut += `<b>${filterProductsArray[i].nombre}</b><br />`;
         txtOut += `Hight: ${filterProductsArray[i].alto}<br />`;
         txtOut += `Width: ${filterProductsArray[i].ancho}<br />`;
@@ -103,18 +103,20 @@ function updateProducts() {
         filterProductsArray = productArray.filter(product => product.idMarca == select.value);
     } else { filterProductsArray = productArray }
     for (i = 0; i < filterProductsArray.length; i++) {
-        let newElement = document.createElement('li');
-        newElement.setAttribute("class", "List");
-        txtOut += `<b>${filterProductsArray[i].nombre}</b><br />`;
+        let newElement = document.createElement('div');
+        newElement.setAttribute("class", "card");
+        txtOut += `<div class="card-body">`;
+        txtOut += `<h5 class="card-title">${filterProductsArray[i].nombre}</h5>`;
         txtOut += `Hight: ${filterProductsArray[i].alto}<br />`;
         txtOut += `Width: ${filterProductsArray[i].ancho}<br />`;
         txtOut += `Large: ${filterProductsArray[i].largo}<br />`;
         txtOut += `Description: ${filterProductsArray[i].descripcion}<br />`;
         txtOut += `NumberReference: ${filterProductsArray[i].numeroReferencia}<br />`;
         txtOut += `Price: ${filterProductsArray[i].precio}$ <br />`;
-        txtOut += `Warranty: ${filterProductsArray[i].tiempoGarantia} días <br />`;
         txtOut += `Unities: ${filterProductsArray[i].unidadesDisponibles}<br />`;
-        txtOut += `Brand: ${brandArray.find(element => element.id == filterProductsArray[i].idMarca).nombre}<br />`;
+        txtOut += `Brand: ${brandArray.find(element => element.id == filterProductsArray[i].idMarca).nombre}<br /></div>`;
+        txtOut += `<div class="card-footer"> <small class="text-muted">Warranty: ${filterProductsArray[i].tiempoGarantia} days</small>`;
+        txtOut += `</div>`
         newElement.innerHTML = txtOut;
         list.appendChild(newElement);
         txtOut = "";
@@ -151,7 +153,36 @@ function updateProducts() {
     }
     
   }*/
+function showAlert(type, message, duration) {
+    if (!message) return false;
+    if (!type) type = 'info';
+    $("<div class='alert alert-message alert-" +
+        type +
+        " data-alert alert-dismissible'>" +
+        "<button class='close alert-link' data-dismiss='alert'>&times;</button>" +
+        message + " </div>").hide().appendTo('body').fadeIn(300);
+    if (duration === undefined) {
+        duration = 5000;
+    }
+    if (duration !== false) {
+        $(".alert-message").delay(duration).fadeOut(500, function () {
+            $(this).remove();
+        });
+    }
+}
+function myAlertTop() {
+    $(".myAlert-top").show();
+    setTimeout(function () {
+        $(".myAlert-top").hide();
+    }, 2000);
+}
 
+function myAlertBottom() {
+    $(".myAlert-bottom").show();
+    setTimeout(function () {
+        $(".myAlert-bottom").hide();
+    }, 2000);
+}
 main();
 
 

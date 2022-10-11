@@ -63,10 +63,37 @@ function updateProducts() {
     
 }
 
+/*function encodeImageFileAsURL(element) {
+    let file = element.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function() {
+        const newImage={
+            id: 0,
+            idElectrodomestico: 0,
+            picByte: [
+              "string"
+            ],
+            habilitado: true
+
+        }
+        console.log(JSON.stringify(newImage))
+        
+        fetch('https://electrics.azurewebsites.net/GaleriaElectrodomestico/CrearGaleriaElectrodomestico?dataOwner=023223b1-9c10-40cb-a890-1f164057389d',{
+            method:'POST',
+            body: JSON.stringify(newImage),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(res =>res.json())
+        .then(data=>console.log(data));
+        
+    }
+    
+  }*/
 
 main();
-//console.log(brandarray);
-//getBrand();
+
 
 
 

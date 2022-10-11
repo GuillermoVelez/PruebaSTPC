@@ -1,11 +1,41 @@
 var productArray = [];
 var filterProductsArray = [];
 var brandArray = [];
+var form= document.getElementById('form');
 const select = document.getElementById('filter');
 brand = document.getElementById('filter');
 brand.addEventListener('change', (event) => {
     updateProducts()
 });
+
+form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var newProduct={
+        nombre: document.getElementsByName('nombre')[0].value,
+        descripcion: document.getElementsByName('descripcion')[0].value,
+        precio: document.getElementsByName('precio')[0].value,
+        numeroReferencia: document.getElementsByName('numeroReferencia')[0].value,
+        idMarca: parseInt(document.getElementsByName('idMarca')[0].value),
+        idCategoria: parseInt(document.getElementsByName('idCategoria')[0].value),
+        unidadesDisponibles: parseInt(document.getElementsByName('unidadesDisponibles')[0].value),
+        tiempoGarantia: parseInt(document.getElementsByName('tiempoGarantia')[0].value),
+        alto: parseInt(document.getElementsByName('alto')[0].value),
+        largo: parseInt(document.getElementsByName('largo')[0].value),
+        ancho: parseInt(document.getElementsByName('ancho')[0].value)
+    }
+    console.log(newProduct);
+    fetch('https://electrics.azurewebsites.net/Electrodomestico/CrearElectrodomestico?dataOwner=023223b1-9c10-40cb-a890-1f164057389d',
+    {
+        method: 'POST',
+        body: JSON.stringify(newProduct),
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }).then( res=> res.json())
+    .then(data=>{
+        console.log(data)
+    })
+})
 
 
 function getProducts(filter) {
@@ -24,6 +54,7 @@ async function getAllInfo() {
 }
 
 async function main() {
+    
     await getAllInfo();
     let options = `<option value="all">All</option>`;
     for (i = 0; i < brandArray.length; i++) {
@@ -60,8 +91,37 @@ function updateProducts() {
         list.appendChild(newElement);
         txtOut = "";
     }
-    
+
 }
+
+function updateProducts() {
+    const list = document.getElementById('list');
+    list.innerHTML = '';
+    var txtOut = "";
+    console.log(productArray);
+    if (select.value != 'all') {
+        filterProductsArray = productArray.filter(product => product.idMarca == select.value);
+    } else { filterProductsArray = productArray }
+    for (i = 0; i < filterProductsArray.length; i++) {
+        let newElement = document.createElement('li');
+        newElement.setAttribute("class", "List");
+        txtOut += `<b>${filterProductsArray[i].nombre}</b><br />`;
+        txtOut += `Hight: ${filterProductsArray[i].alto}<br />`;
+        txtOut += `Width: ${filterProductsArray[i].ancho}<br />`;
+        txtOut += `Large: ${filterProductsArray[i].largo}<br />`;
+        txtOut += `Description: ${filterProductsArray[i].descripcion}<br />`;
+        txtOut += `NumberReference: ${filterProductsArray[i].numeroReferencia}<br />`;
+        txtOut += `Price: ${filterProductsArray[i].precio}$ <br />`;
+        txtOut += `Warranty: ${filterProductsArray[i].tiempoGarantia} días <br />`;
+        txtOut += `Unities: ${filterProductsArray[i].unidadesDisponibles}<br />`;
+        txtOut += `Brand: ${brandArray.find(element => element.id == filterProductsArray[i].idMarca).nombre}<br />`;
+        newElement.innerHTML = txtOut;
+        list.appendChild(newElement);
+        txtOut = "";
+    }
+
+}
+
 
 /*function encodeImageFileAsURL(element) {
     let file = element.files[0];

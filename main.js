@@ -65,33 +65,6 @@ async function main() {
     updateProducts();
 
 }
-function updateProducts() {
-    const list = document.getElementById('list');
-    list.innerHTML = '';
-    var txtOut = "";
-    console.log(productArray);
-    if (select.value != 'all') {
-        filterProductsArray = productArray.filter(product => product.idMarca == select.value);
-    } else { filterProductsArray = productArray }
-    for (i = 0; i < filterProductsArray.length; i++) {
-        let newElement = document.createElement('li');
-        newElement.setAttribute("class", "list-group-item");
-        txtOut += `<b>${filterProductsArray[i].nombre}</b><br />`;
-        txtOut += `Hight: ${filterProductsArray[i].alto}<br />`;
-        txtOut += `Width: ${filterProductsArray[i].ancho}<br />`;
-        txtOut += `Large: ${filterProductsArray[i].largo}<br />`;
-        txtOut += `Description: ${filterProductsArray[i].descripcion}<br />`;
-        txtOut += `NumberReference: ${filterProductsArray[i].numeroReferencia}<br />`;
-        txtOut += `Price: ${filterProductsArray[i].precio}$ <br />`;
-        txtOut += `Warranty: ${filterProductsArray[i].tiempoGarantia} días <br />`;
-        txtOut += `Unities: ${filterProductsArray[i].unidadesDisponibles}<br />`;
-        txtOut += `Brand: ${brandArray.find(element => element.id == filterProductsArray[i].idMarca).nombre}<br />`;
-        newElement.innerHTML = txtOut;
-        list.appendChild(newElement);
-        txtOut = "";
-    }
-
-}
 
 function updateProducts() {
     const list = document.getElementById('list');
